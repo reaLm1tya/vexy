@@ -5,9 +5,12 @@ on:
     branches: [master]
   workflow_dispatch:
 
+permissions:
+  contents: write  # required for creating releases and uploading assets
+
 jobs:
   build:
-    runs-on: macos-15  # Xcode 26.2 required (see versions.json)
+    runs-on: macos-15-large  # more CPU = faster; Xcode 26.2 (see versions.json)
 
     steps:
       - name: Checkout
@@ -28,6 +31,14 @@ jobs:
           sudo mkdir -p /Users/Shared
           cp -R $GITHUB_WORKSPACE /Users/Shared/
           mv /Users/Shared/$(basename $GITHUB_WORKSPACE) /Users/Shared/telegram-ios
+
+      - name: Cache Bazel
+        uses: actions/cache@v4
+        with:
+          path: /private/var/tmp/_bazel_containerhost
+          key: bazel-telegram-ios-${{ runner.os }}-${{ hashFiles('MODULE.bazel', 'versions.json', '.gitmodules') }}
+          restore-keys: |
+            bazel-telegram-ios-${{ runner.os }}-
 
       - name: Build the App
         run: |
