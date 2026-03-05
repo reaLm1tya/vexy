@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: macos-15-large  # more CPU = faster; Xcode 26.2 (see versions.json)
+    runs-on: macos-15  # Xcode 26.2 (see versions.json); macos-15-large is paid
 
     steps:
       - name: Checkout
