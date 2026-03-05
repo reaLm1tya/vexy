@@ -275,7 +275,9 @@ typedef enum {
 #if TARGET_OS_SIMULATOR && defined(__aarch64__)
     return;
 #endif
-    
+    if (@available(iOS 26, *)) {
+        return;
+    }
     if (/*[[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground*/true && !_isOpenGLLoaded)
     {
         _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];

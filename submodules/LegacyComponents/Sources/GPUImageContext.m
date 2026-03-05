@@ -248,8 +248,10 @@ static void *openGLESContextQueueKey;
 
 - (EAGLContext *)createContext
 {
+    if (@available(iOS 26, *)) {
+        return nil;
+    }
     EAGLContext *context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2 sharegroup:_sharegroup];
-    NSAssert(context != nil, @"Unable to create an OpenGL ES 2.0 context. The GPUImage framework requires OpenGL ES 2.0 support to work.");
     return context;
 }
 
@@ -274,12 +276,11 @@ static void *openGLESContextQueueKey;
     if (_context == nil)
     {
         _context = [self createContext];
-        [EAGLContext setCurrentContext:_context];
-        
-        // Set up a few global settings for the image processing pipeline
-        glDisable(GL_DEPTH_TEST);
+        if (_context != nil) {
+            [EAGLContext setCurrentContext:_context];
+            glDisable(GL_DEPTH_TEST);
+        }
     }
-    
     return _context;
 }
 

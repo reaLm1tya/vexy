@@ -46,6 +46,9 @@
 		eaglLayer.opaque = true;
 		eaglLayer.drawableProperties = @{ kEAGLDrawablePropertyRetainedBacking : @false, kEAGLDrawablePropertyColorFormat : kEAGLColorFormatRGBA8 };
 
+		if (@available(iOS 26, *)) {
+			return nil;
+		}
 		_context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 		if (!_context)
 			return nil;
